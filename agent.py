@@ -16,41 +16,43 @@ else:
     device = "cpu"
 
 
+class Agent():
+    def run(self, is_training=True, render=False):
+        env = gym.make("FlappyBird-v0", render_mode="human" if render else None)
+        
+        num_states = env.observation_space.shape[0] # input dim
+        num_actions = env.action_space.n # output dim
+        
+        policy_dqn = DQN(num_states, num_actions).to(device)
+    
+        
+        if is_training:
+            memory = ReplayMemory(10000)
+            
+        for episode in itertools.count():
+            
+            state, _ = env.reset()
+            episode_rewards = 0
+            terminated = False
 
-def run(self, is_training=True, render=False):
-    env = gym.make("FlappyBird-v0", render_mode="human" if render else None)
-    
-    num_states = env.observation_space.shape[0] # input dim
-    num_actions = env.action_space.n # output dim
-    
-    policy_dqn = DQN(num_states, num_actions).to(device)
- 
-    
-    if is_training:
-        memory = ReplayMemory(10000)
-        
-    for episode in itertools.count():
-        
-        state, _ = env.reset()
-        episode_rewards = 0
-        terminated = False
-
-        while not terminated:
-            # Next ation
-            # (feed the obervation to your agent and get the next action)
-            action = env.action_space.sample()  # This is just a random action, replace it with your agent's action
+            while not terminated:
+                # Next ation
+                # (feed the obervation to your agent and get the next action)
+                action = env.action_space.sample()  # This is just a random action, replace it with your agent's action
+                
+                # Processing: terminated => done
+                next_state, reward, terminated, _, _ = env.step(action)
+                
+                if is_training:
+                    # Store the transition in memory
+                    memory.append((state, action, next_state, reward, terminated))
+                
+                state = next_state
+                episode_rewards += reward
             
-            # Processing: terminated => done
-            next_state, reward, terminated, _, _ = env.step(action)
-            
-            if is_training:
-                # Store the transition in memory
-                memory.append((state, action, next_state, reward, terminated))
-            
-            state = next_state
-            episode_rewards += reward
-        
-        print(f"episode: {episode+1} with total reward: {episode_rewards}")
+            print(f"episode: {episode+1} with total reward: {episode_rewards}")
 
     # env.close() -- manually stop the game by closing the window, otherwise it will run forever
+
+
 
