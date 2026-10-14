@@ -38,6 +38,10 @@ class Agent():
         self.reward_threshold = params["reward_threshold"]
         self.network_sync_rate = params["network_sync_rate"]
         self.mini_batch_size = params["mini_batch_size"]
+        
+        # loss function
+        self.loss_fn = nn.MSELoss()
+        self.optimizer = None  # Initialize optimizer later after creating the DQN model
             
             
     def run(self, is_training=True, render=False):
