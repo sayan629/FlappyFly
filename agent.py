@@ -27,12 +27,17 @@ class Agent():
         
         self.alpha = params["alpha"]
         self.gamma = params["gamma"]
+        
         self.epsilon_init = params["epsilon_init"]
-        self.epsilon_init = params["epsilon_init"]
-        self.epsilon_init = params["epsilon_init"]
-        self.epsilon_init = params["epsilon_init"]
-        self.epsilon_init = params["epsilon_init"]
-            
+        self.epsilon_min = params["epsilon_min"]
+        self.epsilon_decay = params["epsilon_decay"]
+        
+        self.replay_memory_size = params["replay_memory_size"]
+        self.mini_batch_size = params["mini_batch_size"]
+        
+        self.reward_threshold = params["reward_threshold"]
+        self.network_sync_rate = params["network_sync_rate"]
+        self.mini_batch_size = params["mini_batch_size"]
             
             
     def run(self, is_training=True, render=False):
