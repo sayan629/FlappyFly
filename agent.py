@@ -11,8 +11,8 @@ else:
 
 
 
-def run():
-    env = gym.make("FlappyBird-v0", render_mode="human")
+def run(self, is_training=True, render=False):
+    env = gym.make("FlappyBird-v0", render_mode="human" if render else None)
     state, _ = env.reset()
 
     while True:
