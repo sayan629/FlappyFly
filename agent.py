@@ -20,15 +20,18 @@ def run(self, is_training=True, render=False):
     num_actions = env.action_space.n # output dim
     
     policy_dqn = DQN(num_states, num_actions).to(device)
-    
-    state, _ = env.reset()
+ 
     
     if is_training:
         memory = ReplayMemory(10000)
         
     for episode in itertools.count():
+        
+        state, _ = env.reset()
+        episode_rewards = 0
+        terminated = False
 
-        while True:
+        while not terminated:
             # Next ation
             # (feed the obervation to your agent and get the next action)
             action = env.action_space.sample()  # This is just a random action, replace it with your agent's action
@@ -40,9 +43,8 @@ def run(self, is_training=True, render=False):
                 # Store the transition in memory
                 memory.append((state, action, next_state, reward, terminated))
             
-            # checking if the player is still alive
-            if terminated:
-                break
+            state = next_state
+            episode_rewards += reward
 
-    env.close() 
+    # env.close() -- manually stop the game by closing the window, otherwise it will run forever
 
