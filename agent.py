@@ -50,7 +50,7 @@ class Agent():
     
         
         if is_training:
-            memory = ReplayMemory(10000)
+            memory = ReplayMemory(self.replay_memory_size)
             
         for episode in itertools.count():
             
