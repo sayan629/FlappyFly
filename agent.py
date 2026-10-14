@@ -17,6 +17,24 @@ else:
 
 
 class Agent():
+    
+    def __init__(self, param_set):
+        self.param_set = param_set
+        
+        with open("parameters.yaml", "r") as f:
+            all_param_set = yaml.safe_load(f)
+            params = all_param_set[param_set]
+        
+        self.alpha = params["alpha"]
+        self.gamma = params["gamma"]
+        self.epsilon_init = params["epsilon_init"]
+        self.epsilon_init = params["epsilon_init"]
+        self.epsilon_init = params["epsilon_init"]
+        self.epsilon_init = params["epsilon_init"]
+        self.epsilon_init = params["epsilon_init"]
+            
+            
+            
     def run(self, is_training=True, render=False):
         env = gym.make("FlappyBird-v0", render_mode="human" if render else None)
         
