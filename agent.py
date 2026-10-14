@@ -45,6 +45,8 @@ def run(self, is_training=True, render=False):
             
             state = next_state
             episode_rewards += reward
+        
+        print(f"episode: {episode+1} with total reward: {episode_rewards}")
 
     # env.close() -- manually stop the game by closing the window, otherwise it will run forever
 
