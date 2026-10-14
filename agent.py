@@ -10,6 +10,16 @@ import gymnasium as gym
 env = gym.make("FlappyBird-v0", render_mode="human")
 state, _ = env.reset()
 
-While True:
+while True:
     # Next ation
     # (feed the obervation to your agent and get the next action)
+    action = env.action_space.sample()  # This is just a random action, replace it with your agent's action
+    
+    # Processing: terminated => done
+    next_state, reward, terminated, _, _ = env.step(action)
+    
+    # checking if the player is still alive
+    if terminated:
+        break
+
+env.close()
