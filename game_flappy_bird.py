@@ -6,3 +6,14 @@ import pygame
 env = gym.make("FlappyBird-v0", render_mode="human")
 state, info = env.reset()
 done = False
+
+# Initialize PyGame keyboard
+pygame.init()
+screen = pygame.display.get_surface()  # Gym has already created a window
+
+while not done:
+    action = 0  # default -> 0 is no flap & 1 is flap
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
