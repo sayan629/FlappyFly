@@ -62,7 +62,7 @@ class Agent():
             # copy the weights from policy_dqn to target_dqn
             target_dqn.load_state_dict(policy_dqn.state_dict())
             
-            step = 0
+            steps = 0
             self.optimizer = optim.Adam(policy_dqn.parameters(), lr=self.alpha)
             
         for episode in itertools.count():
@@ -90,14 +90,21 @@ class Agent():
                 if is_training:
                     # Store the transition in memory
                     memory.append((state, action, next_state, reward, terminated))
+                    steps += 1
                 
                 state = next_state
                 episode_rewards += reward
             
             print(f"episode: {episode+1} with total reward: {episode_rewards} & epsilon: {epsilon}")
             
-            # epsilon decay
-            epsilon = max(epsilon * self.epsilon_decay, self.epsilon_min)
+            if is_training:
+                # epsilon decay
+                epsilon = max(epsilon * self.epsilon_decay, self.epsilon_min)
+                
+            if is_training and len(memory) > self.mini_batch_size:
+                # get sample experiences from memory
+                
+                
 
     # env.close() -- manually stop the game by closing the window, otherwise it will run forever
 
