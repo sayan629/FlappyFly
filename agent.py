@@ -103,7 +103,14 @@ class Agent():
                 
             if is_training and len(memory) > self.mini_batch_size:
                 # get sample experiences from memory
+                mini_batch = memory.sample(self.mini_batch_size)
                 
+                optimize(mini_batch, policy_dqn, target_dqn)
+                
+                # sync the network
+                if steps > self.network_sync_rate:
+                    target_dqn.load_state_dict(policy_dqn.state_dict())
+                    steps = 0
                 
 
     # env.close() -- manually stop the game by closing the window, otherwise it will run forever
