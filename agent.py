@@ -118,21 +118,14 @@ class Agent():
 
     def optimize(self, mini_batch, policy_dqn, target_dqn):
         # get experiences => batch train
-        for state, action, next_state, reward, terminated in mini_batch:
-            
-            if terminated:
-                target = reward
-            else:
-                with torch.no_grad():
-                    target_q = reward + self.gamma * target_dqn(next_state).max()
-                
-                current_q  = policy_dqn(state)
-                
-                # loss
-                loss = self.loss_fn(current_q, target_q)
-                
-                self.optimizer.zero_grad()
-                loss.backward()  # backpropagation
-                self.optimizer.step()  # update the weights
+        states, actions, next_states, rewards, terminarions = zip(*mini_batch)
+        
+        states = torch.stack(states)
+        actions = torch.stack(actions)
+        next_states = torch.stack(next_states)
+        rewards = torch.stack(rewards)
+        terminations = torch.tensor(terminations).float().to(device)
+        
+        # cal 
                 
 
