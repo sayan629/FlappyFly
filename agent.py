@@ -58,6 +58,13 @@ class Agent():
             memory = ReplayMemory(self.replay_memory_size)
             epsilon = self.epsilon_init
             
+            target_dqn = DQN(num_states, num_actions).to(device)
+            # copy the weights from policy_dqn to target_dqn
+            target_dqn.load_state_dict(policy_dqn.state_dict())
+            
+            step = 0
+            self.optimizer = optim.Adam(policy_dqn.parameters(), lr=self.alpha)
+            
         for episode in itertools.count():
             state, _ = env.reset()
             state = torch.tensor(state, dtype=torch.float , device=device)
