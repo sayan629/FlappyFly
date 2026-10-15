@@ -79,7 +79,10 @@ class Agent():
                 state = next_state
                 episode_rewards += reward
             
-            print(f"episode: {episode+1} with total reward: {episode_rewards}")
+            print(f"episode: {episode+1} with total reward: {episode_rewards} & epsilon: {epsilon}")
+            
+            # epsilon decay
+            epsilon = max(epsilon * self.epsilon_decay, self.epsilon_min)
 
     # env.close() -- manually stop the game by closing the window, otherwise it will run forever
 
