@@ -116,4 +116,12 @@ class Agent():
     # env.close() -- manually stop the game by closing the window, otherwise it will run forever
 
 
+    def optimize(self, mini_batch, policy_dqn, target_dqn):
+        for state, action, next_state, reward, terminated in mini_batch:
+            
+            if terminated:
+                target = reward
+            else:
+                with torch.no_grad():
+                    target_q = reward + self.gamma * target_dqn(next_state).max()
 
