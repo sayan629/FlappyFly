@@ -135,6 +135,12 @@ class Agent():
         
         # compute the loss
         loss = self.loss_fn(current_q, target_q)
+        
+        
+        # optimize the model
+        self.optimizer.zero_grad()
+        loss.backward()  # backpropagation
+        self.optimizer.step() # update the weights
             
         
                 
