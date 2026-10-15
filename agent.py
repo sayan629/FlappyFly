@@ -86,7 +86,7 @@ class Agent():
             episode_reward = 0
             terminated = False
 
-            while not terminated:
+            while (not terminated and episode_reward < self.self.reward_threshold):
                 if is_training and random.random() < epsilon:
                     action = env.action_space.sample()  # explore
                     action = torch.tensor(action, dtype=torch.long, device=device)
@@ -98,6 +98,8 @@ class Agent():
                 # Processing: terminated => done
                 next_state, reward, terminated, _, _ = env.step(action.item())
                 
+                episode_reward += reward
+                
                 # create torch tensors for next_state and reward
                 next_state = torch.tensor(next_state, dtype=torch.float, device=device)
                 reward = torch.tensor(reward, dtype=torch.float, device=device)
@@ -108,7 +110,7 @@ class Agent():
                     steps += 1
                 
                 state = next_state
-                episode_reward += reward
+                
             
             print(f"episode: {episode+1} with total reward: {episode_reward} & epsilon: {epsilon}")
             
@@ -131,7 +133,7 @@ class Agent():
                 # get sample experiences from memory
                 mini_batch = memory.sample(self.mini_batch_size)
                 
-                optimize(mini_batch, policy_dqn, target_dqn)
+                self.optimize(mini_batch, policy_dqn, target_dqn)
                 
                 # sync the network
                 if steps > self.network_sync_rate:
