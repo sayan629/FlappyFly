@@ -7,6 +7,7 @@ import yaml
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import random
 
 if torch.backends.mps.is_available():
     device = "mps"
@@ -58,19 +59,25 @@ class Agent():
             epsilon = self.epsilon_init
             
         for episode in itertools.count():
-            
             state, _ = env.reset()
+            state = torch.tensor(state, dtype=torch.float , device=device)
             episode_rewards = 0
             terminated = False
 
             while not terminated:
                 if is_training and random.random() < epsilon:
                     action = env.action_space.sample()  # explore
+                    action = torch.tensor(action, dtype=torch.long, device=device)
+
                 else:
                     action = policy_dqn(state).argmax() # exploit
                 
                 # Processing: terminated => done
                 next_state, reward, terminated, _, _ = env.step(action)
+                
+                # create torch tensors for next_state and reward
+                next_state = torch.tensor(next_state, dtype=torch.float, device=device)
+                reward = torch.tensor(reward, dtype=torch.float, device=device)
                 
                 if is_training:
                     # Store the transition in memory
