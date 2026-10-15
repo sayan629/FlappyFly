@@ -73,6 +73,11 @@ class Agent():
             steps = 0
             self.optimizer = optim.Adam(policy_dqn.parameters(), lr=self.alpha)
             best_reward = float("-inf")
+        
+        else:
+            # best policy load
+            policy_dqn.load_state_dict(torch.load(self.MODEL_FILE))
+            policy_dqn.eval()
             
         for episode in itertools.count():
             state, _ = env.reset()
