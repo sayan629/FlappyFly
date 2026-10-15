@@ -126,6 +126,10 @@ class Agent():
         rewards = torch.stack(rewards)
         terminations = torch.tensor(terminations).float().to(device)
         
-        # cal 
+        # calculate the target Q values - if termination = true => zero
+        with torch.no_grad():
+            target_q = rewards + self.gamma * (1 - terminations) * target_dqn(next_states).max(dim=1)[0]
+            
+        
                 
 
