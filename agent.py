@@ -8,6 +8,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import random
+import argparse
+import os
 
 if torch.backends.mps.is_available():
     device = "mps"
@@ -16,6 +18,9 @@ elif torch.cuda.is_available():
 else:
     device = "cpu"
 
+
+RUNS_DIR = "runs"
+os.makedirs(RUNS_DIR, exist_ok=True)
 
 class Agent():
     
@@ -43,7 +48,8 @@ class Agent():
         # loss function
         self.loss_fn = nn.MSELoss()
         self.optimizer = None  # Initialize optimizer later after creating the DQN model
-            
+        
+        self.LOG_FILE =  os.path.join(RUNS_DIR, f"{self.param_set}.log")
             
     def run(self, is_training=True, render=False):
         env = gym.make("FlappyBird-v0", render_mode="human" if render else None)
