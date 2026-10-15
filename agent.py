@@ -130,6 +130,12 @@ class Agent():
         with torch.no_grad():
             target_q = rewards + self.gamma * (1 - terminations) * target_dqn(next_states).max(dim=1)[0]
             
+        # calculate y_pred i.e. the Q value from the current policy
+        current_q = policy_dqn(states).gather(dim=1, index=actions.unsqueeze(dim=1)).squeeze()
+        
+        # compute the loss
+        loss = self.loss_fn(current_q, target_q)
+            
         
                 
 
