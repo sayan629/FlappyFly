@@ -70,10 +70,10 @@ class Agent():
                     action = torch.tensor(action, dtype=torch.long, device=device)
 
                 else:
-                    action = policy_dqn(state).argmax() # exploit
+                    action = policy_dqn(state.unsqueeze(dim=0)).argmax() # exploit
                 
                 # Processing: terminated => done
-                next_state, reward, terminated, _, _ = env.step(action)
+                next_state, reward, terminated, _, _ = env.step(action.item())
                 
                 # create torch tensors for next_state and reward
                 next_state = torch.tensor(next_state, dtype=torch.float, device=device)
