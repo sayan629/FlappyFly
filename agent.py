@@ -64,9 +64,10 @@ class Agent():
             terminated = False
 
             while not terminated:
-                # Next ation
-                # (feed the obervation to your agent and get the next action)
-                action = env.action_space.sample()  # This is just a random action, replace it with your agent's action
+                if is_training and random.random() < epsilon:
+                    action = env.action_space.sample()  # explore
+                else:
+                    action = policy_dqn(state).argmax() # exploit
                 
                 # Processing: terminated => done
                 next_state, reward, terminated, _, _ = env.step(action)
